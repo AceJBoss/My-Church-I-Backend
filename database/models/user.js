@@ -50,12 +50,22 @@ module.exports = (sequelize, DataTypes) => {
     marital_status: DataTypes.ENUM('Single', 'Married', 'Divorced'),
     dob: DataTypes.STRING,
     year: DataTypes.INTEGER,
-    image_url: DataTypes.TEXT,
-    image_key: DataTypes.TEXT,
+    image_url: {
+      type: DataTypes.TEXT,
+      allowNull:true
+    },
+    image_key:{
+      type:DataTypes.TEXT,
+      allowNull:true
+    },
     password: DataTypes.STRING,
     lga_id: DataTypes.INTEGER,
     user_type_id: DataTypes.INTEGER,
-    status: DataTypes.ENUM('Active', 'Suspended')
+    status: {
+      type: DataTypes.ENUM('Active', 'Suspended'),
+      defaultValue: 'Active'
+    }
+
   }, {
     sequelize,
     modelName: 'User',

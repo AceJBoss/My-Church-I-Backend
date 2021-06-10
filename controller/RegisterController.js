@@ -14,9 +14,6 @@ const State = require('../database/models/').State;
 const LgaData = require('../database/models/').Lga;
 const UserType = require('../database/models/').UserType;
 const User = require('../database/models/').User;
-const UserWallet = require('../database/models/').UserWallet;
-const VirtualAccount = require('../database/models/').VirtualAccount;
-const Referral = require('../database/models/').Referral;
 const formvalidator = require('../middlewares/formvalidator');
 const Sequelize = require('sequelize');
 const request = require('request');
@@ -31,13 +28,7 @@ class RegisterController{
 	*/
 	static async registerUser(req, res){
 		try{
-
-			var first_name = req.body.first_name;
-			var last_name = req.body.last_name;
-			var email = req.body.email;
-			var phone = req.body.phone;
-			var password = req.body.password;
-			var referral_code = req.body.referral_code;
+			let {title,first_name, last_name, email,phone,gender,marital_status,dob,year,password} = req.body;
 
 			// validate entry
 		    let rules = {
@@ -91,9 +82,6 @@ class RegisterController{
 				}
 			}
 
-			// generate otp
-			let ref_code = await callbacks.randomStr(first_name.length < 6?6:8);
-			let otp = await callbacks.randomNum(5);
 			let userType = await callbacks.multiple(UserType, {user_type:'user'});
 
 			// create student registrtion
@@ -107,41 +95,11 @@ class RegisterController{
 				password:bcrypt.hashSync(password, 10),
 				user_type_id:userType[0].dataValues.id
 			}
-			// send otp to user phone
-			var smsOptions = {
-	            username: process.env.SMART_SMS_USERNAME,
-	            password: process.env.SMART_SMS_PASSWORD,
-	            message: `Here is your OTP:${otp}. With love from Viscio Express Logisitics`,
-	            sender: 'Viscio',
-	            recipient: phone
-	        }
-	       
-			// call the send sms instance
-			sendSms(smsOptions, (err, sentRes)=>{
-				if(err){
-					return res.status(200).json({
-						error:true,
-						message:"Failed to send OTP and register user. Try again later."
-					});
-	            }else{
 
-					// create
-					User.create(createUser)
-					.then(async (saved)=>{
-						if(saved){
-							if(referral_code != undefined && validateRefCode.length > 0){
-								// create referral link bonus
-								await Referral.create({
-									user_id:saved.id,
-									referee_id:validateRefCode[0].dataValues.id,
-									bonus:100
-								});
-							}
-							// create user wallet
-							await UserWallet.create({
-								user_id:saved.id,
-								balance:0.00
-							});
+			// create
+			User.create(createUser)
+				.then(async (saved)=>{
+					if(saved){
 
 							return res.status(201).json({
 								error:false,
@@ -160,8 +118,7 @@ class RegisterController{
 							message:"Failed to register. Kindly try again later."
 						});
 					});
-	            }
-	        });
+
 		}catch(e){
 			return res.status(200).json({
 				error:true,

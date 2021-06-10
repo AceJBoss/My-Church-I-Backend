@@ -36,10 +36,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       image_url: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull:true
       },
       image_key: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull:true
       },
       password: {
         type: Sequelize.STRING
@@ -48,10 +50,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       user_type_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'UserTypes',
+          key: 'id'
+        }
       },
       status: {
-        type: Sequelize.ENUM('Active', 'Suspended')
+        type: Sequelize.ENUM('Active', 'Suspended'),
+        defaultValue: 'Active'
       },
       createdAt: {
         allowNull: false,
