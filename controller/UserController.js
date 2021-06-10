@@ -8,7 +8,9 @@
 const bcrypt = require('bcryptjs');
 const callbacks = require('../function/index.js');
 const jwt = require('jsonwebtoken');
+const UserType = require('../database/models/').UserType;
 const User = require('../database/models/').User;
+const Event = require('../database/models/').Event;
 const ScheduleCounselling = require('../database/models/').ScheduleCounselling;
 const formvalidator = require('../middlewares/formvalidator');
 const {cloudinary} = require('../middlewares/cloudinary');
@@ -389,7 +391,7 @@ class UserController{
 	/**
 	 * fetch Member Counsellings
 	 */
-	static async fetchMemberCounselling(req, res){
+	static async fetchCounsellingRequests(req, res){
 		try{
 			// validate access
 			let auth =  req.decoded.user.is_auth;
@@ -426,6 +428,150 @@ class UserController{
 		}
 	}
 
+	/**
+	 * Fetch Events
+	 */
+	static async fetchEvents(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'member' || auth == 'admin'){
+				Event.findAll({
+					order: [['createdAt', 'DESC']]
+				}).then(event=>{
+					// collect data
+					let data = [];
+					for (var i = 0; i < event.length; i++) {
+						data.push(event[i].dataValues);
+					}
+					// return record
+					return res.status(200).json(data);
+				}).catch(err=>{
+					return res.status(203).json({
+						error:true,
+						message:err.message
+					});
+				});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(203).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
+	/**
+	 * view all Ministers
+	 */
+	static async fetchAllMinisters(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member'){
+				// get user type id
+				let getUserType = await callbacks.findOne(UserType, {user_type:'deaconate'});
+				if(getUserType.length < 1){
+					return res.status(203).json({
+						error:true,
+						message:'Failed to fetch records'
+					});
+				}
+				let getUserType2 = await callbacks.findOne(UserType, {user_type:'pastor'});
+				if(getUserType2.length < 1){
+					return res.status(203).json({
+						error:true,
+						message:'Failed to fetch records'
+					});
+				}
+
+				User.findAll({
+					where:{
+						user_type_id:{
+							$in: [getUserType.id, getUserType2.id],
+						}
+					}
+				}).then(users=>{
+					// collect data
+					let data = [];
+					for (var i = 0; i < users.length; i++) {
+						data.push(users[i].dataValues);
+					}
+					// return record
+					return res.status(200).json(data);
+				}).catch(err=>{
+					return res.status(203).json({
+						error:true,
+						message:err.message
+					});
+				});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(203).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
+	/**
+	 * view all Important VIPs
+	 */
+	static async fetchAllVIPDates(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member'){
+				// get user type id
+				let getUserType = await callbacks.findOne(UserType, {user_type:'deaconate'});
+				if(getUserType.length < 1){
+					return res.status(203).json({
+						error:true,
+						message:'Failed to fetch records'
+					});
+				}
+				let current_month = new Date().getMonth();
+				User.findAll({
+					where:{
+						month: current_month
+					}
+				}).then(users=>{
+					// collect data
+					let data = [];
+					for (var i = 0; i < users.length; i++) {
+						data.push(users[i].dataValues);
+					}
+					// return record
+					return res.status(200).json(data);
+				}).catch(err=>{
+					return res.status(203).json({
+						error:true,
+						message:err.message
+					});
+				});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(203).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
 }
 
 module.exports = UserController;

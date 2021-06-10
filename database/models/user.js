@@ -50,6 +50,8 @@ module.exports = (sequelize, DataTypes) => {
     marital_status: DataTypes.ENUM('Single', 'Married', 'Divorced'),
     dob: DataTypes.STRING,
     year: DataTypes.INTEGER,
+    month: DataTypes.INTEGER,
+    day: DataTypes.INTEGER,
     image_url: {
       type: DataTypes.TEXT,
       allowNull:true

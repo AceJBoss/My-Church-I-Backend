@@ -281,6 +281,92 @@ class AdminController{
 		}
 	}
 
+	/**
+	 * create user
+	 */
+	static async createUser(req, res) {
+		try {
+			let {title, first_name, last_name, email, phone, dob, year, month, day, password, user_type_id} = req.body;
+			// validate entry
+			let rules = {
+				title: 'required',
+				first_name: 'required',
+				last_name: 'required',
+				email: 'required|email',
+				phone: 'required',
+				password: 'required',
+				dob: 'required'
+			}
+
+			let validator = formvalidator(req, rules);
+			if (validator) {
+				return res.status(203).json({
+					error: true,
+					message: validator
+				});
+			}
+			password = password.replace(/\s/g, '');
+			// validate email
+			let validateEmail = await callbacks.multiple(User, {email: email});
+			if (validateEmail.length > 0) {
+				return res.status(200).json({
+					error: true,
+					message: 'Email already exist.'
+				});
+			}
+			// validate phone
+			let validatePhone = await callbacks.multiple(User, {phone: phone});
+			if (validatePhone.length > 0) {
+				return res.status(200).json({
+					error: true,
+					message: 'Phone number already exist.'
+				});
+			}
+
+			// create user
+			let createUser = {
+				title:title,
+				first_name: first_name,
+				last_name: last_name,
+				email: email,
+				phone: phone,
+				password: bcrypt.hashSync(password, 10),
+				dob: dob,
+				year: year,
+				month: month,
+				day: day,
+				user_type_id: user_type_id
+			}
+
+			// create
+			User.create(createUser)
+				.then(async (saved) => {
+					if (saved) {
+						return res.status(201).json({
+							error: false,
+							message: "Registration successful"
+						});
+					} else {
+						return res.status(203).json({
+							error: true,
+							message: "Failed to register. Kindly try again later."
+						});
+					}
+				})
+				.catch(err => {
+					return res.status(200).json({
+						error: true,
+						message: "Failed to register. Kindly try again later."
+					});
+				});
+
+		} catch (e) {
+			return res.status(200).json({
+				error: true,
+				message: e.message
+			});
+		}
+	}
 
 	/**
 	* manage all members
@@ -507,7 +593,6 @@ class AdminController{
 			// validate access
 			let auth =  req.decoded.user.is_auth;
 			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
-
 				Event.findAll({
 					order: [['createdAt', 'DESC']]
 				}).then(events=>{

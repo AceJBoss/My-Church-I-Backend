@@ -35,6 +35,12 @@ module.exports = {
       year: {
         type: Sequelize.INTEGER
       },
+      month: {
+        type: Sequelize.INTEGER
+      },
+      day: {
+        type: Sequelize.INTEGER
+      },
       image_url: {
         type: Sequelize.TEXT,
         allowNull:true

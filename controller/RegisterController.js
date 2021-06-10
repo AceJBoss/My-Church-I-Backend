@@ -26,7 +26,7 @@ class RegisterController {
 	 */
 	static async registerUser(req, res) {
 		try {
-			let {title, first_name, last_name, email, phone, dob, year, password} = req.body;
+			let {title, first_name, last_name, email, phone, dob, year, month, day, password} = req.body;
 			//let {title, first_name, last_name, email, phone, gender, marital_status, image_url, image_key, lga_id, dob, year, password} = req.body;
 
 			// validate entry
@@ -76,6 +76,8 @@ class RegisterController {
 				password: bcrypt.hashSync(password, 10),
 				dob: dob,
 				year: year,
+				month: month,
+				day: day,
 				user_type_id: userType[0].dataValues.id
 			}
 
