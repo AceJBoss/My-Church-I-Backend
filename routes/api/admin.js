@@ -8,6 +8,7 @@ const express = require("express");
 const router = express.Router();
 const AdminController = require('../../controller/AdminController');
 const authGuard = require('../../middlewares/authguard');
+const {parser} = require('../../middlewares/cloudinary');
 
 router.post('/admin/create/church/unit', authGuard, AdminController.createChurchUnit);
 
