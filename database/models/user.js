@@ -20,6 +20,20 @@ module.exports = (sequelize, DataTypes) => {
         through: 'MembersUnit',
         foreignKey: 'user_id'
       });
+      User.hasMany(models.ScheduleCounselling, {
+        foreignKey: 'user_id',
+        onDelete: 'CASCADE',
+      });
+      User.belongsTo(models.Lga, {
+        foreignKey: 'lga_id',
+        onDelete: 'CASCADE',
+      });
+
+      User.hasMany(models.CounselFeedback, {
+        foreignKey: 'pastor_id',
+        onDelete: 'CASCADE',
+      });
+
     }
   };
   User.init({
