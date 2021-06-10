@@ -1,0 +1,28 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": 123456,
+    "database": "viscio",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "eokrdrxjnfgmqg",
+    "password": "93e40a1184cffcc54d355dad6f296738aa22a5717b9ce5a4fdd264c8b42cbe81",
+    "database": "dfdr390mg24k9a",
+    "host": "ec2-18-215-111-67.compute-1.amazonaws.com",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+          "rejectUnauthorized": false
+       }
+    }
+  }
+}
