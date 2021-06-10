@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'lga_id',
         onDelete: 'CASCADE',
       });
+      User.hasMany(models.Pledge, {
+        foreignKey: 'user_id',
+        onDelete: 'CASCADE',
+      });
 
       User.hasMany(models.CounselFeedback, {
         foreignKey: 'pastor_id',
