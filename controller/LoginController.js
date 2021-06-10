@@ -15,8 +15,6 @@ const State = require('../database/models/').State;
 const LgaData = require('../database/models/').Lga;
 const UserType = require('../database/models/').UserType;
 const User = require('../database/models/').User;
-const Organization = require('../database/models/').Organization;
-const Driver = require('../database/models/').Driver;
 const formvalidator = require('../middlewares/formvalidator');
 const Sequelize = require('sequelize');
 
@@ -30,12 +28,12 @@ class LoginController{
 	static loginUser(req, res){
 		try{
 
-			var email = req.body.email;
+			var phone = req.body.email;
 			var password = req.body.password;
 
 			// validate entry
 		    let rules = {
-		    	email:'required|email',
+		    	phone:'required',
 		    	password:'required'
 		    }
 
@@ -50,7 +48,7 @@ class LoginController{
 			password = password.replace(/\s/g,'');
 
 			User.findAll({
-				where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('email')), email.toLowerCase())	
+				where: {phone: phone}
 			}).then(async user=>{
 				if (user.length == 0) {
 		 			res.status(200).json({error:true,message: "Invalid Credentials."})
@@ -68,13 +66,6 @@ class LoginController{
 			  				});
 			  			}
 
-			  			if(user[0].dataValues.status == 'Pending'){
-			  				return res.status(203).json({
-			  					error:true,
-			  					message:"Kindly verify your account to be able to login."
-			  				});
-			  			}
-
 			  			// get user type id
 			  			let userTypeId = user[0].dataValues.user_type_id;
 			  			let userType = await callbacks.multiple(UserType, {id:userTypeId});
@@ -83,134 +74,30 @@ class LoginController{
 			  			let userDetails = '';
 			  			let userData = '';
 
-			  			// check user type
-			  			switch(userType[0].dataValues.user_type){
-			  				case 'user':
-			  					// get user details
-			  					userDetails = {
-			  						id:user[0].dataValues.id,
-			  						image_url:user[0].dataValues.image_url,
-			  						first_name:user[0].dataValues.first_name,
-			  						last_name:user[0].dataValues.last_name,
-			  						email:user[0].dataValues.email,
-			  						phone:user[0].dataValues.phone,
-			  						is_auth: userType[0].dataValues.user_type
-			  					};
+						userDetails = {
+							id:user[0].dataValues.id,
+							image_url:user[0].dataValues.image_url,
+							title: user[0].dataValues.title,
+							first_name:user[0].dataValues.first_name,
+							last_name:user[0].dataValues.last_name,
+							email:user[0].dataValues.email,
+							phone:user[0].dataValues.phone,
+							is_auth: userType[0].dataValues.user_type
+						};
 
-			  					userData = {
-			  						image_url:user[0].dataValues.image_url,
-			  						first_name:user[0].dataValues.first_name,
-			  						last_name:user[0].dataValues.last_name,
-			  						email:user[0].dataValues.email,
-			  						phone:user[0].dataValues.phone,
-			  						account:'user'
-			  					}
+						userData = {
+							id:user[0].dataValues.id,
+							image_url:user[0].dataValues.image_url,
+							title: user[0].dataValues.title,
+							first_name:user[0].dataValues.first_name,
+							last_name:user[0].dataValues.last_name,
+							email:user[0].dataValues.email,
+							phone:user[0].dataValues.phone,
+							year: user[0].dataValues.year,
+							dob: user[0].dataValues.dob,
+							is_auth: userType[0].dataValues.user_type
+						};
 
-			  				break;
-
-			  				case 'organization':
-			  					// get organization details
-			  					 fetchUserData = await callbacks.multiple(Organization, {user_id:user[0].dataValues.id});
-			  					 userDetails = {
-			  						id:fetchUserData[0].dataValues.id,
-			  						user_id:fetchUserData[0].dataValues.user_id,
-			  						image_url:user[0].dataValues.image_url,
-			  						organization_name:user[0].dataValues.first_name,
-			  						email:user[0].dataValues.email,
-			  						phone:user[0].dataValues.phone,
-			  						address:fetchUserData[0].dataValues.address,
-			  						ride_charge:fetchUserData[0].dataValues.ride_charge,
-			  						is_auth: userType[0].dataValues.user_type
-			  					};
-
-			  					 userData = {
-			  						user_id:fetchUserData[0].dataValues.user_id,
-			  						image_url:user[0].dataValues.image_url,
-			  						organization_name:user[0].dataValues.first_name,
-			  						email:user[0].dataValues.email,
-			  						phone:user[0].dataValues.phone,
-			  						address:fetchUserData[0].dataValues.address,
-			  						ride_charge:fetchUserData[0].dataValues.ride_charge,
-			  						account:'organization'
-			  					}
-
-			  				break;
-
-			  				case 'driver':
-			  					// get drver details
-			  					fetchUserData = await callbacks.multiple(Driver, {user_id:user[0].dataValues.id});
-			  					userDetails = {
-			  						id:fetchUserData[0].dataValues.id,
-			  						user_id:fetchUserData[0].dataValues.user_id,
-			  						image_url:user[0].dataValues.image_url,
-			  						organization_id:fetchUserData[0].dataValues.organization_id,
-			  						address:fetchUserData[0].dataValues.address,
-			  						lat:fetchUserData[0].dataValues.lat,
-			  						lng:fetchUserData[0].dataValues.lng,
-			  						wake_point_lat:fetchUserData[0].dataValues.wake_point_lat,
-			  						wake_point_lng:fetchUserData[0].dataValues.wake_point_lng,
-			  						dob:fetchUserData[0].dataValues.dob,
-			  						duty_on:fetchUserData[0].dataValues.duty_on,
-			  						license_uploaded:fetchUserData[0].dataValues.license_uploaded,
-			  						is_verified_by_admin:fetchUserData[0].dataValues.is_verified_by_admin,
-			  						name:user[0].dataValues.name,
-			  						email:user[0].dataValues.email,
-			  						phone:user[0].dataValues.phone,
-			  						status:user[0].dataValues.status,
-			  						is_auth: userType[0].dataValues.user_type
-			  					};
-
-			  					userData = {
-			  						user_id:fetchUserData[0].dataValues.user_id,
-			  						image_url:user[0].dataValues.image_url,
-			  						organization_id:fetchUserData[0].dataValues.organization_id,
-			  						address:fetchUserData[0].dataValues.address,
-			  						lat:fetchUserData[0].dataValues.lat,
-			  						lng:fetchUserData[0].dataValues.lng,
-			  						wake_point_lat:fetchUserData[0].dataValues.wake_point_lat,
-			  						wake_point_lng:fetchUserData[0].dataValues.wake_point_lng,
-			  						dob:fetchUserData[0].dataValues.dob,
-			  						duty_on:fetchUserData[0].dataValues.duty_on,
-			  						license_uploaded:fetchUserData[0].dataValues.license_uploaded,
-			  						is_verified_by_admin:fetchUserData[0].dataValues.is_verified_by_admin,
-			  						name:user[0].dataValues.name,
-			  						email:user[0].dataValues.email,
-			  						phone:user[0].dataValues.phone,
-			  						status:user[0].dataValues.status,
-			  						account:'driver'
-			  					};
-
-			  				break;
-
-			  				case 'admin':
-			  					// get admin details
-			  					fetchUserData = await callbacks.multiple(User, {id:user[0].dataValues.id});
-			  					userDetails = {
-			  						id:fetchUserData[0].dataValues.id,
-			  						first_name:user[0].dataValues.first_name,
-			  						last_name:user[0].dataValues.last_name,
-			  						email:user[0].dataValues.email,
-			  						phone:user[0].dataValues.phone,
-			  						is_auth: userType[0].dataValues.user_type
-			  					};
-
-			  					userData = {
-			  						first_name:user[0].dataValues.first_name,
-			  						last_name:user[0].dataValues.last_name,
-			  						email:user[0].dataValues.email,
-			  						phone:user[0].dataValues.phone,
-			  						account:'admin'
-			  					};
-
-			  				break;
-
-			  				default:
-			  					return res.status(200).json({error:true, message:"Invalid Credentials."});
-			  				break;
-			  			}
-
-
-			  			
 						var token = jwt.sign({
 				          user: userDetails
 				        }, secret, {
@@ -252,7 +139,6 @@ class LoginController{
 
 			// collect email address
 			var email = req.body.email;
-
 			let rules  = {
 				'email':'required'
 			}
