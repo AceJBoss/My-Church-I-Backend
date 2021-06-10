@@ -9,12 +9,7 @@ const bcrypt = require('bcryptjs');
 const callbacks = require('../function/index.js');
 const jwt = require('jsonwebtoken');
 const User = require('../database/models/').User;
-const UserWallet = require('../database/models/').UserWallet;
-const VirtualAccount = require('../database/models/').VirtualAccount;
-const Organization = require('../database/models/').Organization;
-const Country = require('../database/models/').Country;
-const State = require('../database/models/').State;
-const LgaData = require('../database/models/').Lga;
+const ScheduleCounselling = require('../database/models/').ScheduleCounselling;
 const formvalidator = require('../middlewares/formvalidator');
 const {cloudinary} = require('../middlewares/cloudinary');
 const Sequelize = require('sequelize');
@@ -33,31 +28,12 @@ class UserController{
 			// validate user 
 			let auth = req.decoded.user.is_auth;
 
-			if(auth == 'user' || auth == 'admin'){
+			if(auth == 'member' || auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
 				
 				// fetch all user profile
 			    User.findAll({
 			    	where:{
 			    		id:req.decoded.user.id
-			    	}
-			    })
-			    .then(record=>{
-			    	return res.status(200).json(record);
-			    })
-			    .catch(err=>{
-			    	return res.status(203).json({
-			    		error:true,
-			    		message:err.message
-			    	});
-			    });
-			}else if(auth == 'organization'){
-				// fetch all user profile
-			    User.findAll({
-			    	include:[{
-			    		model:Organization
-			    	}],
-			    	where:{
-			    		id:req.decoded.user.user_id
 			    	}
 			    })
 			    .then(record=>{
@@ -91,17 +67,21 @@ class UserController{
 			// validate user 
 			let auth = req.decoded.user.is_auth;
 
-			if(auth == 'user' || auth == 'admin'){
+			if(auth == 'member' || auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
 				// collect data
 				let user_id = req.decoded.user.id;
 
-				let {first_name, last_name, phone, email} = req.body;
+				let {title, first_name, last_name, phone, email, gender, marital_status, lga_id } = req.body;
 				// validate entry
 			    let rules = {
+			    	'title':'required',
 			    	'first_name':'required',
 			    	'last_name':'required',
 			    	'email':'required|email',
-			    	'phone':'required'
+			    	'phone':'required',
+					'gender':'required',
+					'marital_status':'required',
+					'lga_id':'required',
 			    };
 
 			    let validator = formvalidator(req, rules);
@@ -123,7 +103,6 @@ class UserController{
 					});
 				}
 
-
 				// validate phone number
 				let validatePhone = await callbacks.multiple(User, {phone:phone});
 
@@ -136,145 +115,50 @@ class UserController{
 
 			    // update user account
 			    let userAccount = {
+					title: title,
 			    	first_name:first_name,
 			    	last_name:last_name,
 			    	email:email,
 			    	phone:phone,
+					gender: gender,
+					marital_status: marital_status,
+					lga_id: lga_id
 			    }
 
 			    User.update(userAccount, {
 			    	where:{
 			    		id:user_id
 			    	}
-			    })
-			    .then(result=>{
+			    }).then(result=>{
 			    	if(result){
 		    			let userDetails  = {
     						id:user_id,
+							title: title,
 	  						first_name:first_name,
 	  						last_name:last_name,
 	  						email:email,
 	  						phone:phone,
+							gender: gender,
+							marital_status: marital_status,
+							lga_id: lga_id,
 	  						is_auth: auth
     					}
 
     					let userData = {
+							title: title,
     						first_name:first_name,
 	  						last_name:last_name,
 	  						fullname:first_name+' '+last_name,
 	  						email:email,
 	  						phone:phone,
+							gender: gender,
+							marital_status: marital_status,
+							lga_id: lga_id,
     					};
 
 						var token = jwt.sign({
 							user: userDetails
 						}, secret, {});
-
-						userData.token = token;
-    					return res.status(200).json({
-    						error:false,
-    						data:userData,
-    						message:"Profile updated successfully."
-    					});
-			    	}else{
-			    		return res.status(203).json({
-			    			error:true,
-			    			message:'Failed to update profile.'
-			    		});
-			    	}
-			    })
-			    .catch(err=>{
-			    	return res.status(203).json({
-			    		error:true,
-			    		message:'Profile update failed.'
-			    	});
-			    });
-			}else if(auth == 'organization'){
-				// collect data
-				let user_id = req.decoded.user.user_id;
-				let organization_id = req.decoded.user.id;
-
-				let {organization_name, phone, email, address} = req.body;
-				// validate entry
-			    let rules = {
-			    	'organization_name':'required',
-			    	'email':'required|email',
-			    	'phone':'required',
-			    	'address':'required'
-			    };
-
-			    let validator = formvalidator(req, rules);
-				
-				if(validator){
-					return res.status(203).json({
-						error:true,
-						message:validator
-					});
-				}
-
-				// validate email 
-				let validateEmail = await callbacks.multiple(User, {email:email});
-
-				if(validateEmail.length > 0 && validateEmail[0].dataValues.id != user_id){
-					return res.status(203).json({
-						error:true,
-						message:"Email already exist."
-					});
-				}
-
-
-				// validate phone number
-				let validatePhone = await callbacks.multiple(User, {phone:phone});
-
-				if(validatePhone.length > 0 && validatePhone[0].dataValues.id != user_id){
-					return res.status(203).json({
-						error:true,
-						message:"Phone number already exist."
-					});
-				}
-
-			    // update user account
-			    let userAccount = {
-			    	first_name:organization_name,
-			    	email:email,
-			    	phone:phone
-			    }
-
-			    User.update(userAccount, {
-			    	where:{
-			    		id:user_id
-			    	}
-			    })
-			    .then(async result=>{
-			    	if(result){
-
-			    		await Organization.update({address:address}, {
-			    			where:{
-			    				id:organization_id
-			    			}
-			    		});
-
-		    			let userDetails  = {
-    						id:organization_id,
-    						user_id:user_id,
-	  						organization_name:organization_name,
-	  						email:email,
-	  						phone:phone,
-	  						address:address,
-	  						is_auth: auth
-    					}
-
-    					let userData = {
-    						user_id:user_id,
-    						organization_name:organization_name,
-	  						email:email,
-	  						phone:phone,
-	  						address:address
-    					};
-
-						var token = jwt.sign({
-							user: userDetails
-						}, secret, {expiresIn: '1d'});
 
 						userData.token = token;
     					return res.status(200).json({
@@ -317,7 +201,7 @@ class UserController{
 			// validate user 
 			let auth = req.decoded.user.is_auth;
 
-			if(auth == 'user' || auth == 'admin'){
+			if(auth == 'member' || auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
 				// collect data
 				let user_id = req.decoded.user.id;
 				let {old_password, new_password} = req.body;
@@ -374,41 +258,6 @@ class UserController{
 		}
 	}
 
-	/**
-	* get user wallet info
-	*/
-	static async fetchUserWallet(req, res){
-		try{
-			// validate user 
-			let auth = req.decoded.user.is_auth;
-
-			if(auth == 'user'){
-				let getWalletData =  await callbacks.multiple(UserWallet, {user_id:req.decoded.user.id});
-				let getAccountData = await callbacks.multiple(VirtualAccount, {user_id:req.decoded.user.id});
-
-				// return response
-				return res.status(200).json({
-					error:false,
-					wallet_balance:getWalletData[0].dataValues.balance,
-					account_details:{
-						account_name:getAccountData[0].dataValues.account_name,
-						bank_name:getAccountData[0].dataValues.bank_name,
-						account_no:getAccountData[0].dataValues.account_no
-					}
-				});
-			}else{
-				return res.status(203).json({
-					error:true,
-					message:'un-authorized access.'
-				});
-			}
-		}catch(e){
-			return res.status(203).json({
-				error:true,
-				message:e.message
-			});
-		}
-	}
 
 	/**
 	* update user profile image
@@ -418,7 +267,7 @@ class UserController{
 			// validate user 
 			let auth = req.decoded.user.is_auth;
 
-			if(auth == 'user'){
+			if(auth == 'member' || auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
 				// collect data
 				var image_url = req.file.secure_url;
 				var image_key = req.file.public_id;
@@ -471,6 +320,112 @@ class UserController{
 			});
 		}
 	}
+
+	/**
+	 * Schedule Counselling
+	 */
+	static async scheduleCounselling(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'deaconate' || auth == 'member'){
+				let user_id = req.decoded.user.id;
+				// collect data
+				let {message} = req.body;
+
+				// validate entry
+				let rules = {
+					message:'required'
+				}
+				let validator = formvalidator(req, rules);
+				if(validator){
+					return res.status(203).json({
+						error:true,
+						message:validator
+					});
+				}
+				// upload counselling request
+				let counselObj = {
+					message:message,
+					user_id:user_id,
+					status: 'Pending'
+				}
+
+				ScheduleCounselling.create(counselObj)
+					.then(async saved=>{
+						if(saved){
+							return res.status(201).json({
+								error:false,
+								message:'Counselling Request sent successfully.'
+							});
+
+						}else{
+							return res.status(203).json({
+								error:true,
+								message:'Failed to deliver counselling request.'
+							});
+						}
+					})
+					.catch(err=>{
+						return res.status(203).json({
+							error:true,
+							message:err.message
+						});
+					});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(200).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
+	/**
+	 * fetch Member Counsellings
+	 */
+	static async fetchMemberCounselling(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'deaconate' || auth == 'member'){
+				let user_id = req.decoded.user.id;
+
+				ScheduleCounselling.findAll({
+					where: {user_id: user_id}
+				}).then(counsels=>{
+					// collect data
+					let data = [];
+					for (var i = 0; i < counsels.length; i++) {
+						data.push(counsels[i].dataValues);
+					}
+					// return record
+					return res.status(200).json(data);
+				}).catch(err=>{
+					return res.status(203).json({
+						error:true,
+						message:err.message
+					});
+				});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(203).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
 }
 
 module.exports = UserController;

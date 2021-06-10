@@ -83,7 +83,6 @@ class RegisterController {
 			User.create(createUser)
 				.then(async (saved) => {
 					if (saved) {
-
 						return res.status(201).json({
 							error: false,
 							message: "Registration successful"

@@ -70,7 +70,6 @@ class LoginController{
 			  			let userTypeId = user[0].dataValues.user_type_id;
 			  			let userType = await callbacks.multiple(UserType, {id:userTypeId});
 
-			  			let fetchUserData ='';
 			  			let userDetails = '';
 			  			let userData = '';
 
@@ -103,12 +102,11 @@ class LoginController{
 				        }, secret, {
 				          expiresIn: '1d'
 				        });
-
+						userData.token = token;
 				        return res.status(200).json({
 				        	error:false,
 				        	account:userType[0].dataValues.user_type,
-							user: userData,
-							token:token
+							data: userData
 				        });
 					}else{
 						return res.status(200).json({
