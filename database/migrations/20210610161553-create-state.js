@@ -11,6 +11,14 @@ module.exports = {
       state: {
         type: Sequelize.STRING
       },
+      country_id: {
+        type: Sequelize.BIGINT,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Countries',
+          key: 'id'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
