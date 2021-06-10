@@ -39,12 +39,12 @@ app.use(expressValidator({
 // swagger configuration
 const swaggerDefinition = {
   info: {
-    title: 'VISICIO Swagger API',
+    title: 'Church Swagger API',
     version: '1.0.0',
     description: 'Endpoints to test the routes',
   },
-  // host: 'localhost:5000',
-  host:'viscioexpress.herokuapp.com',
+  // host: 'viscioexpress.herokuapp.com',
+  host:'localhost:5000',
   basePath: '/',
   securityDefinitions: {
     bearerAuth: {
@@ -84,12 +84,10 @@ app.use(express.static(__dirname + "/public"));
 const port = process.env.PORT || 5000;
 
 app.get('/', function(req, res) {
-    res.status(200).json({status:"success", message:"Welcome to Viscio Express Logistics."})
+    res.status(200).json({status:"success", message:"Welcome to Church Application Backend."})
 });
 
 // start server
 server.listen(port, async function () {
-  // var password = bcrypt.hashSync('123456', 10);
-  // console.log(password);
   console.log(`Server started on port ${port}...`);
 });

@@ -1,7 +1,7 @@
 {
-  "name": "viscio",
+  "name": "church",
   "version": "1.0.0",
-  "description": "A logisitics application",
+  "description": "Church application",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -9,8 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "logistics",
-    "viscio"
+    "church",
+    "members"
   ],
   "author": "",
   "license": "MIT",
