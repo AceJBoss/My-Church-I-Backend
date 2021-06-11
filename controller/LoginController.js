@@ -28,7 +28,7 @@ class LoginController{
 	static loginUser(req, res){
 		try{
 
-			var phone = req.body.email;
+			var phone = req.body.phone;
 			var password = req.body.password;
 
 			// validate entry

@@ -21,7 +21,7 @@ router.put('/user/update/profile', authGuard, UserController.updateBasicProfile)
 router.put('/user/change/password', authGuard, UserController.changePassword);
 
 // upload profile picture
-router.put("/user/upload/picture",  authGuard, parser.single('file'), UserController.updateProfileImage);
+router.put("/user/profile/picture/update",  authGuard, parser.single('file'), UserController.updateProfileImage);
 
 // user schedule counselling
 router.post('/user/counselling/request', authGuard, UserController.scheduleCounselling);

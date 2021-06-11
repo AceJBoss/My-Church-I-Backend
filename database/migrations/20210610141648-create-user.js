@@ -55,6 +55,9 @@ module.exports = {
       lga_id: {
         type: Sequelize.INTEGER
       },
+      address: {
+        type: Sequelize.STRING
+      },
       user_type_id: {
         type: Sequelize.BIGINT,
         onDelete: 'CASCADE',

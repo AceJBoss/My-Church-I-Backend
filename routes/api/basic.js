@@ -27,6 +27,8 @@ router.get('/lga/:id', BasicController.getLga);
 
 router.get('/lga/state/:id', BasicController.getLgaState);
 
+router.get('/state/lga', BasicController.getStateWithLgas);
+
 // login user 
 router.post('/login', LoginController.loginUser);
 

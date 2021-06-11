@@ -62,6 +62,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: DataTypes.STRING,
     lga_id: DataTypes.INTEGER,
+    address: DataTypes.STRING,
     user_type_id: DataTypes.INTEGER,
     status: {
       type: DataTypes.ENUM('Active', 'Suspended'),

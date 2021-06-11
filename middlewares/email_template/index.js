@@ -333,7 +333,7 @@ exports.forgotPassword = function(fullname, code, currentYear){
 													style="font-size: 12px; line-height: 1.2; font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; color: #555555; mso-line-height-alt: 14px;">
 													<p
 														style="margin: 0; font-size: 14px; line-height: 1.2; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; word-break: break-word; mso-line-height-alt: 17px; margin-top: 0; margin-bottom: 0;">
-														<strong><span style="font-size: 46px;">Hello, <span
+														<strong><span style="font-size: 14px; font-family: Tahoma;">Hello, <span
 																	style="color: #3d3bee;">${fullname}</span>!</span></strong>
 													</p>
 												</div>
@@ -346,7 +346,7 @@ exports.forgotPassword = function(fullname, code, currentYear){
 													style="font-size: 12px; line-height: 1.5; color: #555555; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; mso-line-height-alt: 18px;">
 													<p
 														style="margin: 0; font-size: 12px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 18px; margin-top: 0; margin-bottom: 0;">
-														<strong><span style="font-size: 20px;">A request has been
+														<strong><span style="font-size: 12px; font-family: Tahoma;">A request has been
 																received to reset the password for your Viscio Express
 																Account.</span></strong>
 													</p>
@@ -355,7 +355,7 @@ exports.forgotPassword = function(fullname, code, currentYear){
 														 </p>
 													<p
 														style="margin: 0; font-size: 12px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 18px; margin-top: 0; margin-bottom: 0;">
-														<strong><span style="font-size: 20px;">Kindly use the code below
+														<strong><span style="font-size: 12px; font-family: Tahoma;">Kindly use the code below
 																to sign in into your account. Ensure to change the
 																password once logged in.</span></strong>
 													</p>
@@ -398,7 +398,7 @@ exports.forgotPassword = function(fullname, code, currentYear){
 														style="padding-left:45px;padding-right:45px;font-size:26px;display:inline-block;letter-spacing:undefined;"><span
 															style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span
 																data-mce-style="font-size: 26px; line-height: 52px;"
-																style="font-size: 26px; line-height: 52px;"><strong>${code}</strong></span></span></span>
+																style="font-size: 14px; font-family: Tahoma; line-height: 52px;"><strong>${code}</strong></span></span></span>
 												</div>
 												<!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->
 											</div>
@@ -409,7 +409,7 @@ exports.forgotPassword = function(fullname, code, currentYear){
 													style="font-size: 12px; line-height: 1.5; color: #555555; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; mso-line-height-alt: 18px;">
 													<p
 														style="margin: 0; font-size: 12px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 18px; margin-top: 0; margin-bottom: 0;">
-														<strong><span style="font-size: 20px;">If you feel your account
+														<strong><span style="font-size: 12px; font-family: Tahoma;">If you feel your account
 																has been compromised, kindly reach out to our support
 																team via mail.</span></strong>
 													</p>
@@ -500,8 +500,8 @@ exports.forgotPassword = function(fullname, code, currentYear){
 													style="font-size: 12px; line-height: 1.5; color: #838383; font-family: Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif; mso-line-height-alt: 18px;">
 													<p
 														style="margin: 0; font-size: 14px; line-height: 1.5; text-align: center; word-break: break-word; mso-line-height-alt: 21px; margin-top: 0; margin-bottom: 0;">
-														<span style="color: #000000; font-size: 14px;"><strong>Viscio
-																Express Limited</strong></span>
+														<span style="color: #000000; font-size: 14px;"><strong>Emmanuel
+																Baptist Church</strong></span>
 													</p>
 													<p
 														style="margin: 0; font-size: 14px; line-height: 1.5; text-align: center; word-break: break-word; mso-line-height-alt: 21px; margin-top: 0; margin-bottom: 0;">

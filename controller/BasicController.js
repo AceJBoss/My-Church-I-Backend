@@ -176,6 +176,31 @@ class BasicController {
       return res.send(500);
     }
   }
+  // get state and places
+  static getStateWithLgas(req, res) {
+    try {
+      State.findAll({
+        include: [
+          {
+            model: LgaData,
+          }
+        ],
+        where: {
+          country_id: 160
+        }
+      }).then(result => {
+        if (result.length > 0) {
+          return res.status(200).json({ data: result });
+        } else {
+          return res.status(203).json({ message: "Sorry, no record found." });
+        }
+      }).catch(err => { return res.send(err); });
+
+      return;
+    } catch (e) {
+      return res.send(500);
+    }
+  }
 }
 
 module.exports = BasicController;

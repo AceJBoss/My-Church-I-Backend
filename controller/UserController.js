@@ -73,7 +73,7 @@ class UserController{
 				// collect data
 				let user_id = req.decoded.user.id;
 
-				let {title, first_name, last_name, phone, email, gender, marital_status, lga_id } = req.body;
+				let {title, first_name, last_name, phone, email, gender, marital_status, lga_id, address } = req.body;
 				// validate entry
 			    let rules = {
 			    	'title':'required',
@@ -84,6 +84,7 @@ class UserController{
 					'gender':'required',
 					'marital_status':'required',
 					'lga_id':'required',
+					'address':'required',
 			    };
 
 			    let validator = formvalidator(req, rules);
@@ -124,7 +125,8 @@ class UserController{
 			    	phone:phone,
 					gender: gender,
 					marital_status: marital_status,
-					lga_id: lga_id
+					lga_id: lga_id,
+					address: address
 			    }
 
 			    User.update(userAccount, {
@@ -143,6 +145,7 @@ class UserController{
 							gender: gender,
 							marital_status: marital_status,
 							lga_id: lga_id,
+							address: address,
 	  						is_auth: auth
     					}
 
@@ -156,6 +159,7 @@ class UserController{
 							gender: gender,
 							marital_status: marital_status,
 							lga_id: lga_id,
+							address: address
     					};
 
 						var token = jwt.sign({
