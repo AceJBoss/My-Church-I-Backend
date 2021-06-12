@@ -220,7 +220,7 @@ class BasicController {
             data.push(event[i]);
           }
           // return record
-          return res.status(200).json(data);
+          return res.status(200).json({data:data});
         }).catch(err=>{
           return res.status(203).json({
             error:true,
