@@ -10,6 +10,7 @@ const Country = require('../database/models/').Country;
 const State = require('../database/models/').State;
 const LgaData = require('../database/models/').Lga;
 const Event = require('../database/models/').Event;
+const moment = require('moment');
 
 class BasicController {
 
