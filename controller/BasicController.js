@@ -10,6 +10,7 @@ const Country = require('../database/models/').Country;
 const State = require('../database/models/').State;
 const LgaData = require('../database/models/').Lga;
 const Event = require('../database/models/').Event;
+const Sermon = require('../database/models/').Sermon;
 const moment = require('moment');
 
 class BasicController {
@@ -232,6 +233,44 @@ class BasicController {
         error:true,
         message:e.message
       });
+    }
+  }
+
+  /**
+   * fetch all Sermons
+   */
+  static fetchSermons(req, res) {
+    try {
+
+        Sermon.findAll({
+          order: [
+            ['id', 'DESC']
+          ]
+        })
+            .then(result => {
+
+              var sermonArr = [];
+              for (var i = 0; i < result.length; i++) {
+                var sermonObj = {
+                  id: result[i].dataValues.id,
+                  title: result[i].dataValues.title,
+                  preacher: result[i].dataValues.preacher,
+                  video: result[i].dataValues.video,
+                  created_at: moment(result[i].dataValues.createdAt).format('Do-MMM-YYYY')
+                };
+                sermonArr.push(sermonObj);
+              }
+
+              return res.status(200).json({ error: false, data: sermonArr, message: '' });
+            })
+            .catch(err => {
+              return res.status(203).json({
+                error: true,
+                message: "Failed to fetch record"
+              });
+            });
+    } catch (e) {
+      return res.sendStatus(500);
     }
   }
 }

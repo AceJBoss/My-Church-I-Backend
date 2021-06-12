@@ -32,6 +32,9 @@ router.get('/state/lga', BasicController.getStateWithLgas);
 // user view events
 router.get('/view/events',  BasicController.fetchEvents);
 
+// user view events
+router.get('/view/sermons',  BasicController.fetchSermons);
+
 // login user 
 router.post('/login', LoginController.loginUser);
 

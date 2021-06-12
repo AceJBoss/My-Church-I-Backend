@@ -35,6 +35,8 @@ router.put('/admin/suspend/user/:member_id', authGuard, AdminController.suspendM
 
 router.post('/admin/create/event', authGuard, parser.single('file'), AdminController.createEvents);
 
+router.post('/admin/create/sermon', authGuard, AdminController.createSermon);
+
 // fetch members counselling requests
 router.get('/admin/view/counselling/request', authGuard, AdminController.fetchMemberCounsellingRequest);
 

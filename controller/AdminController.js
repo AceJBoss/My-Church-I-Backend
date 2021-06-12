@@ -11,6 +11,7 @@ const User = require('../database/models/').User;
 const UserType = require('../database/models/').UserType;
 const ChurchUnit = require('../database/models/').ChurchUnit;
 const Event = require('../database/models/').Event;
+const Sermon = require('../database/models/').Sermon;
 const ScheduleCounselling = require('../database/models/').ScheduleCounselling;
 const CounselFeedback = require('../database/models/').CounselFeedback;
 const formvalidator = require('../middlewares/formvalidator');
@@ -617,6 +618,85 @@ class AdminController{
 			}
 		}catch(e){
 			return res.status(203).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
+	/**
+	 * Create Sermon
+	 */
+	static async createSermon(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
+				// collect data
+				let {title, video, preacher} = req.body;
+
+				// validate entry
+				let rules = {
+					title:'required',
+					preacher:'required',
+					video:'required'
+				}
+
+				let validator = formvalidator(req, rules);
+
+				if(validator){
+					return res.status(203).json({
+						error:true,
+						message:validator
+					});
+				}
+
+				// validate sermon
+				let validateSermon = await callbacks.multiple(Event, {title:title});
+
+				if(validateSermon.length > 0){
+					return res.status(203).json({
+						error:true,
+						message:'A Sermon with this title already exist.'
+					});
+				}
+
+				// upload sermon
+				let sermonObj = {
+					title:title,
+					video:video.replace("watch?v=", "embed/"),
+					preacher:preacher,
+				}
+
+				Sermon.create(sermonObj)
+					.then(async saved=>{
+						if(saved){
+							return res.status(201).json({
+								error:false,
+								message:'Sermon saved successfully.'
+							});
+
+						}else{
+							return res.status(203).json({
+								error:true,
+								message:'Failed to save sermon.'
+							});
+						}
+					})
+					.catch(err=>{
+						return res.status(203).json({
+							error:true,
+							message:err.message
+						});
+					});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(200).json({
 				error:true,
 				message:e.message
 			});
