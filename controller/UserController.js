@@ -11,6 +11,7 @@ const jwt = require('jsonwebtoken');
 const UserType = require('../database/models/').UserType;
 const User = require('../database/models/').User;
 const Event = require('../database/models/').Event;
+const moment = require('moment');
 const ScheduleCounselling = require('../database/models/').ScheduleCounselling;
 const formvalidator = require('../middlewares/formvalidator');
 const {cloudinary} = require('../middlewares/cloudinary');
@@ -451,7 +452,8 @@ class UserController{
 					// collect data
 					let data = [];
 					for (var i = 0; i < event.length; i++) {
-						data.push(event[i].dataValues);
+						event[i].dataValues.postTime = moment(event[i].createdAt, "YYYY-MM-DD h:mm:ss:a").fromNow();
+						data.push(event[i]);
 					}
 					// return record
 					return res.status(200).json(data);
