@@ -438,44 +438,6 @@ class UserController{
 		}
 	}
 
-	/**
-	 * Fetch Events
-	 */
-	static async fetchEvents(req, res){
-		try{
-			// validate access
-			let auth =  req.decoded.user.is_auth;
-			if(auth == 'pastor' || auth == 'deaconate' || auth == 'member' || auth == 'admin'){
-				Event.findAll({
-					order: [['createdAt', 'DESC']]
-				}).then(event=>{
-					// collect data
-					let data = [];
-					for (var i = 0; i < event.length; i++) {
-						event[i].dataValues.postTime = moment(event[i].createdAt, "YYYY-MM-DD h:mm:ss:a").fromNow();
-						data.push(event[i]);
-					}
-					// return record
-					return res.status(200).json(data);
-				}).catch(err=>{
-					return res.status(203).json({
-						error:true,
-						message:err.message
-					});
-				});
-			}else{
-				return res.status(203).json({
-					error:true,
-					message:'un-authorized access.'
-				});
-			}
-		}catch(e){
-			return res.status(203).json({
-				error:true,
-				message:e.message
-			});
-		}
-	}
 
 	/**
 	 * view all Ministers

@@ -29,6 +29,9 @@ router.get('/lga/state/:id', BasicController.getLgaState);
 
 router.get('/state/lga', BasicController.getStateWithLgas);
 
+// user view events
+router.get('/view/events',  BasicController.fetchEvents);
+
 // login user 
 router.post('/login', LoginController.loginUser);
 

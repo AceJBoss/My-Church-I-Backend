@@ -9,6 +9,7 @@ const callbacks = require('../function/index.js');
 const Country = require('../database/models/').Country;
 const State = require('../database/models/').State;
 const LgaData = require('../database/models/').Lga;
+const Event = require('../database/models/').Event;
 
 class BasicController {
 
@@ -199,6 +200,37 @@ class BasicController {
       return;
     } catch (e) {
       return res.send(500);
+    }
+  }
+
+  /**
+   * Fetch Events
+   */
+  static async fetchEvents(req, res){
+    try{
+      // validate access
+        Event.findAll({
+          order: [['createdAt', 'DESC']]
+        }).then(event=>{
+          // collect data
+          let data = [];
+          for (var i = 0; i < event.length; i++) {
+            event[i].dataValues.postTime = moment(event[i].createdAt, "YYYY-MM-DD h:mm:ss:a").fromNow();
+            data.push(event[i]);
+          }
+          // return record
+          return res.status(200).json(data);
+        }).catch(err=>{
+          return res.status(203).json({
+            error:true,
+            message:err.message
+          });
+        });
+    }catch(e){
+      return res.status(203).json({
+        error:true,
+        message:e.message
+      });
     }
   }
 }

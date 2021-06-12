@@ -29,9 +29,6 @@ router.post('/user/counselling/request', authGuard, UserController.scheduleCouns
 // user view counselling requests
 router.get('/user/view/counselling', authGuard, UserController.fetchCounsellingRequests);
 
-// user view events
-router.get('/user/view/events', authGuard, UserController.fetchEvents);
-
 // user view Ministers
 router.get('/user/view/ministers', authGuard, UserController.fetchAllMinisters);
 
