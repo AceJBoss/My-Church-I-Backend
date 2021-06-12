@@ -286,6 +286,10 @@ class UserController{
 					await cloudinary.uploader.destroy(checkUserImage.image_key);
 				}
 
+				var imageData = {
+					image_url: image_url,
+					image_key: image_key
+				}
 				// update new image url
 				User.update({
 					image_url,
@@ -298,6 +302,7 @@ class UserController{
 					if(updated){
 						return res.status(200).json({
 							error:false,
+							data: imageData,
 							message:"profile picture updated successfully."
 						});
 					}else{
