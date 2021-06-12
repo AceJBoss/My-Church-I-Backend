@@ -506,7 +506,8 @@ class UserController{
 			// validate access
 			let auth =  req.decoded.user.is_auth;
 			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member') {
-				let current_month = new Date().getMonth();
+				var dateobj= new Date() ;
+				var current_month = dateobj.getMonth() + 1;
 				User.findAll({
 					where: {
 						month: current_month
