@@ -497,6 +497,7 @@ class UserController{
 		}
 	}
 
+
 	/**
 	 * view all Important VIPs
 	 */
@@ -504,32 +505,24 @@ class UserController{
 		try{
 			// validate access
 			let auth =  req.decoded.user.is_auth;
-			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member'){
-				// get user type id
-				let getUserType = await callbacks.findOne(UserType, {user_type:'deaconate'});
-				if(getUserType.length < 1){
-					return res.status(203).json({
-						error:true,
-						message:'Failed to fetch records'
-					});
-				}
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member') {
 				let current_month = new Date().getMonth();
 				User.findAll({
-					where:{
+					where: {
 						month: current_month
 					}
-				}).then(users=>{
+				}).then(users => {
 					// collect data
 					let data = [];
 					for (var i = 0; i < users.length; i++) {
 						data.push(users[i].dataValues);
 					}
 					// return record
-					return res.status(200).json(data);
-				}).catch(err=>{
+					return res.status(200).json({data});
+				}).catch(err => {
 					return res.status(203).json({
-						error:true,
-						message:err.message
+						error: true,
+						message: err.message
 					});
 				});
 			}else{

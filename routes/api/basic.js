@@ -35,6 +35,9 @@ router.get('/view/events',  BasicController.fetchEvents);
 // user view events
 router.get('/view/sermons',  BasicController.fetchSermons);
 
+// user view monthly vips
+router.get('/user/view/vips', BasicController.fetchAllVIPDates);
+
 // login user 
 router.post('/login', LoginController.loginUser);
 
