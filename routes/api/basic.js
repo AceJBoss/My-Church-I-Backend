@@ -35,7 +35,7 @@ router.post('/login', LoginController.loginUser);
 // register user 
 router.post('/register', RegisterController.registerUser);
 
-// forgot password
+// user forgot password
 router.post('/forgot/password', LoginController.forgotPassword);
 
 module.exports = router;
