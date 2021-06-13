@@ -557,14 +557,14 @@ class UserController{
 			let auth =  req.decoded.user.is_auth;
 			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member'){
 				// collect data
-				var user_id = req.decoded.user.id;
+				let {pledge_id} = req.body;
 				let {status} = 'Approved';
 
 				Pledge.update({
 					status:status
 				},{
 					where:{
-						id:user_id
+						id:pledge_id
 					}
 				}).then(updated=>{
 					if(updated){
