@@ -449,12 +449,13 @@ class UserController{
 			if(auth == 'deaconate' || auth == 'member' || auth == 'admin' || auth == 'pastor'){
 				let user_id = req.decoded.user.id;
 				// collect data
-				let {title, deadline} = req.body;
+				let {title, deadline_date, deadline_time} = req.body;
 
 				// validate entry
 				let rules = {
 					title:'required',
-					deadline:'required'
+					deadline_date:'required',
+					deadline_time:'required'
 				}
 				let validator = formvalidator(req, rules);
 				if(validator){
@@ -467,7 +468,8 @@ class UserController{
 				let pledgeObj = {
 					title:title,
 					user_id:user_id,
-					deadline:deadline,
+					deadline_date:deadline_date,
+					deadline_time:deadline_time,
 					status: 'Pending'
 				}
 
@@ -476,7 +478,8 @@ class UserController{
 						if(saved){
 							return res.status(201).json({
 								error:false,
-								message:'Pledge saved successfully.'
+								message:'Pledge saved successfully.',
+								data:saved
 							});
 
 						}else{
