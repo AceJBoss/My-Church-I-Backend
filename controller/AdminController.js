@@ -713,6 +713,13 @@ class AdminController{
 			let auth =  req.decoded.user.is_auth;
 			if(auth == 'pastor'){
 				ScheduleCounselling.findAll({
+					include: [
+						{
+							model: User
+						},{
+						model: CounselFeedback
+						}
+						]
 				}).then(counsels=>{
 					// collect data
 					let data = [];
