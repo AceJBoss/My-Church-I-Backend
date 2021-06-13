@@ -13,6 +13,7 @@ const User = require('../database/models/').User;
 const moment = require('moment');
 const ScheduleCounselling = require('../database/models/').ScheduleCounselling;
 const Pledge = require('../database/models/').Pledge;
+const CounselFeedback = require('../database/models/').CounselFeedback;
 const formvalidator = require('../middlewares/formvalidator');
 const {cloudinary} = require('../middlewares/cloudinary');
 const Sequelize = require('sequelize');
@@ -411,7 +412,11 @@ class UserController{
 				let user_id = req.decoded.user.id;
 
 				ScheduleCounselling.findAll({
-					where: {user_id: user_id}
+					where: {user_id: user_id},
+					include: [{
+						model: CounselFeedback,
+						include: [User]
+					}],
 				}).then(counsels=>{
 					// collect data
 					let data = [];
