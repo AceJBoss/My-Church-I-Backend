@@ -10,9 +10,9 @@ const callbacks = require('../function/index.js');
 const jwt = require('jsonwebtoken');
 const UserType = require('../database/models/').UserType;
 const User = require('../database/models/').User;
-const Event = require('../database/models/').Event;
 const moment = require('moment');
 const ScheduleCounselling = require('../database/models/').ScheduleCounselling;
+const Pledge = require('../database/models/').Pledge;
 const formvalidator = require('../middlewares/formvalidator');
 const {cloudinary} = require('../middlewares/cloudinary');
 const Sequelize = require('sequelize');
@@ -418,7 +418,7 @@ class UserController{
 						data.push(counsels[i].dataValues);
 					}
 					// return record
-					return res.status(200).json(data);
+					return res.status(200).json({data});
 				}).catch(err=>{
 					return res.status(203).json({
 						error:true,
@@ -439,6 +439,158 @@ class UserController{
 		}
 	}
 
+	/**
+	 * User Plegdge
+	 */
+	static async initiatePledge(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'deaconate' || auth == 'member' || auth == 'admin' || auth == 'pastor'){
+				let user_id = req.decoded.user.id;
+				// collect data
+				let {title, deadline} = req.body;
+
+				// validate entry
+				let rules = {
+					title:'required',
+					deadline:'required'
+				}
+				let validator = formvalidator(req, rules);
+				if(validator){
+					return res.status(203).json({
+						error:true,
+						message:validator
+					});
+				}
+				// upload pledge
+				let pledgeObj = {
+					title:title,
+					user_id:user_id,
+					deadline:deadline,
+					status: 'Pending'
+				}
+
+				Pledge.create(pledgeObj)
+					.then(async saved=>{
+						if(saved){
+							return res.status(201).json({
+								error:false,
+								message:'Pledge saved successfully.'
+							});
+
+						}else{
+							return res.status(203).json({
+								error:true,
+								message:'Failed to save Pledge.'
+							});
+						}
+					})
+					.catch(err=>{
+						return res.status(203).json({
+							error:true,
+							message:err.message
+						});
+					});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(200).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
+	/**
+	 * fetch All Pledges
+	 */
+	static async fetchAllPledges(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'deaconate' || auth == 'member' || auth == 'admin' || auth == 'pastor'){
+				let user_id = req.decoded.user.id;
+				Pledge.findAll({
+					where: {user_id: user_id}
+				}).then(pledge=>{
+					// collect data
+					let data = [];
+					for (var i = 0; i < pledge.length; i++) {
+						data.push(pledge[i].dataValues);
+					}
+					// return record
+					return res.status(200).json({data});
+				}).catch(err=>{
+					return res.status(203).json({
+						error:true,
+						message:err.message
+					});
+				});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(203).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
+	/**
+	 * Update Pledge
+	 */
+	static async updatePledge(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member'){
+				// collect data
+				var user_id = req.decoded.user.id;
+				let {status} = 'Approved';
+
+				Pledge.update({
+					status:status
+				},{
+					where:{
+						id:user_id
+					}
+				}).then(updated=>{
+					if(updated){
+						return res.status(200).json({
+							error:false,
+							message:"Pledge successfully updated."
+						});
+					}else{
+						return res.status(203).json({
+							error:true,
+							message:"Failed to update pledge."
+						})
+					}
+				}).catch(err=>{
+					return res.status(203).json({error:true, message:err.message});
+				});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(200).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
 
 	/**
 	 * view all Ministers

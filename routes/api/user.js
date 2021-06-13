@@ -35,4 +35,13 @@ router.get('/user/view/ministers', authGuard, UserController.fetchAllMinisters);
 // user view monthly vips
 router.get('/user/view/vips', authGuard, UserController.fetchAllVIPDates);
 
+// user create pledge
+router.post('/user/create/pledge', authGuard, UserController.initiatePledge);
+
+// user view all pledge
+router.get('/user/view/pledges', authGuard, UserController.fetchAllPledges);
+
+// user update pledge status
+router.put('/user/update/pledges', authGuard, UserController.updatePledge);
+
 module.exports = router;

@@ -556,7 +556,8 @@ class AdminController{
 						if(saved){
 							return res.status(201).json({
 								error:false,
-								message:'Event uploaded successfully.'
+								message:'Event uploaded successfully.',
+								data:saved
 							});
 
 						}else{

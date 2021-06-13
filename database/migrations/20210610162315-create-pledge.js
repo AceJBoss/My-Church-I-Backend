@@ -14,6 +14,9 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER
       },
+      deadline: {
+        type: Sequelize.TEXT
+      },
       status: {
         type: Sequelize.STRING
       },
