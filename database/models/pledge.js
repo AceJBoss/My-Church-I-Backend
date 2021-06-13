@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
   Pledge.init({
     title: DataTypes.TEXT,
     user_id: DataTypes.INTEGER,
-    deadline: DataTypes.STRING,
+    deadline_date: DataTypes.STRING,
+    deadline_time: DataTypes.STRING,
     status: DataTypes.STRING
   }, {
     sequelize,
