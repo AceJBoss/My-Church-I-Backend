@@ -16,6 +16,7 @@ const ScheduleCounselling = require('../database/models/').ScheduleCounselling;
 const formvalidator = require('../middlewares/formvalidator');
 const {cloudinary} = require('../middlewares/cloudinary');
 const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 require('dotenv').config();
 var secret = process.env.SECRET;
@@ -462,11 +463,12 @@ class UserController{
 						message:'Failed to fetch records'
 					});
 				}
+				console.log('Hello ' + getUserType.id + getUserType2.id);
 
 				User.findAll({
 					where:{
 						user_type_id:{
-							$in: [getUserType.id, getUserType2.id],
+							[Op.or]: [getUserType.id, getUserType2.id],
 						}
 					}
 				}).then(users=>{
