@@ -9,10 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.TEXT
-      },
-      user_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       deadline_date: {
         type: Sequelize.STRING
@@ -20,8 +17,8 @@ module.exports = {
       deadline_time: {
         type: Sequelize.STRING
       },
-      status: {
-        type: Sequelize.STRING
+      user_id: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
