@@ -463,8 +463,6 @@ class UserController{
 						message:'Failed to fetch records'
 					});
 				}
-				console.log('Hello ' + getUserType.id + getUserType2.id);
-
 				User.findAll({
 					where:{
 						user_type_id:{
