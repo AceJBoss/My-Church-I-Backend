@@ -24,10 +24,10 @@ router.put('/user/change/password', authGuard, UserController.changePassword);
 router.put("/user/profile/picture/update",  authGuard, parser.single('file'), UserController.updateProfileImage);
 
 // user schedule counselling
-router.post('/user/counselling/request', authGuard, UserController.scheduleCounselling);
+router.post('/user/create/counselling', authGuard, UserController.scheduleCounselling);
 
 // user view counselling requests
-router.get('/user/view/counselling', authGuard, UserController.fetchCounsellingRequests);
+router.get('/user/view/counsellings', authGuard, UserController.fetchCounsellingRequests);
 
 // user view Ministers
 router.get('/user/view/ministers', authGuard, UserController.fetchAllMinisters);

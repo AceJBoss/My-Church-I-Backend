@@ -341,7 +341,7 @@ class UserController{
 		try{
 			// validate access
 			let auth =  req.decoded.user.is_auth;
-			if(auth == 'deaconate' || auth == 'member'){
+			if(auth == 'deaconate' || auth == 'member' || auth == 'admin'){
 				let user_id = req.decoded.user.id;
 				// collect data
 				let {message} = req.body;
@@ -369,7 +369,8 @@ class UserController{
 						if(saved){
 							return res.status(201).json({
 								error:false,
-								message:'Counselling Request sent successfully.'
+								message:'Counselling Request sent successfully.',
+								data:saved
 							});
 
 						}else{
@@ -406,7 +407,7 @@ class UserController{
 		try{
 			// validate access
 			let auth =  req.decoded.user.is_auth;
-			if(auth == 'deaconate' || auth == 'member'){
+			if(auth == 'deaconate' || auth == 'member' || auth == 'admin'){
 				let user_id = req.decoded.user.id;
 
 				ScheduleCounselling.findAll({
@@ -440,7 +441,7 @@ class UserController{
 	}
 
 	/**
-	 * User Plegdge
+	 * User create Plegdge
 	 */
 	static async initiatePledge(req, res){
 		try{
