@@ -724,8 +724,8 @@ class AdminController{
 					// collect data
 					let data = [];
 					for (var i = 0; i < counsels.length; i++) {
-						data[i].dataValues.responseTime = moment(event[i].createdAt, "YYYY-MM-DD h:mm:ss:a").fromNow();
-						data.push(counsels[i]);
+						// data[i].dataValues.responseTime = moment(counsels[i].createdAt, "YYYY-MM-DD h:mm:ss:a").fromNow();
+						data.push(counsels[i].dataValues);
 					}
 					// return record
 					return res.status(200).json({data});
