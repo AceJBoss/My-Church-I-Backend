@@ -42,7 +42,7 @@ class UserController{
 			    	}
 			    })
 			    .then(record=>{
-			    	return res.status(200).json(record);
+			    	return res.status(200).json({record});
 			    })
 			    .catch(err=>{
 			    	return res.status(203).json({
