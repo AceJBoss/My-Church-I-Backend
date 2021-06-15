@@ -81,6 +81,8 @@ class LoginController{
 							last_name:user[0].dataValues.last_name,
 							email:user[0].dataValues.email,
 							phone:user[0].dataValues.phone,
+							marital_status:user[0].dataValues.marital_status,
+							address:user[0].dataValues.address,
 							is_auth: userType[0].dataValues.user_type
 						};
 
@@ -94,6 +96,8 @@ class LoginController{
 							phone:user[0].dataValues.phone,
 							year: user[0].dataValues.year,
 							dob: user[0].dataValues.dob,
+							marital_status:user[0].dataValues.marital_status,
+							address:user[0].dataValues.address,
 							is_auth: userType[0].dataValues.user_type
 						};
 
