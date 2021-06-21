@@ -11,6 +11,7 @@ const State = require('../database/models/').State;
 const LgaData = require('../database/models/').Lga;
 const Event = require('../database/models/').Event;
 const Sermon = require('../database/models/').Sermon;
+const Preaching = require('../database/models/').Preaching;
 const moment = require('moment');
 
 class BasicController {
@@ -269,6 +270,44 @@ class BasicController {
                 message: "Failed to fetch record"
               });
             });
+    } catch (e) {
+      return res.sendStatus(500);
+    }
+  }
+
+  /**
+   * fetch all Preachings
+   */
+  static fetchPreachings(req, res) {
+    try {
+
+      Preaching.findAll({
+        order: [
+          ['id', 'DESC']
+        ]
+      })
+          .then(result => {
+            var preachingArr = [];
+            for (var i = 0; i < result.length; i++) {
+              var preachingObj = {
+                id: result[i].dataValues.id,
+                title: result[i].dataValues.title,
+                preacher: result[i].dataValues.preacher,
+                video_url: result[i].dataValues.video_url,
+                video_key: result[i].dataValues.video_key,
+                created_at: moment(result[i].dataValues.createdAt).format('Do-MMM-YYYY')
+              };
+              preachingArr.push(preachingObj);
+            }
+
+            return res.status(200).json({ error: false, data: preachingObj, message: '' });
+          })
+          .catch(err => {
+            return res.status(203).json({
+              error: true,
+              message: "Failed to fetch record"
+            });
+          });
     } catch (e) {
       return res.sendStatus(500);
     }

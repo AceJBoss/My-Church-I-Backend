@@ -13,7 +13,7 @@ cloudinary.config({
 const storage = cloudinaryStorage({
 cloudinary: cloudinary,
 folder: "users",
-allowedFormats: ["jpg", "png", "jpeg"],
+allowedFormats: ["jpg", "png", "jpeg", "mp4"],
 transformation: [{ width: 500, height: 500, crop: "limit" }]
 });
 

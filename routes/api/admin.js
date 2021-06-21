@@ -37,6 +37,8 @@ router.post('/admin/create/event', authGuard, parser.single('file'), AdminContro
 
 router.post('/admin/create/sermon', authGuard, AdminController.createSermon);
 
+router.post('/admin/create/preaching', authGuard, parser.single('file'), AdminController.createPreaching);
+
 // fetch members counselling requests
 router.get('/admin/view/counselling/request', authGuard, AdminController.fetchMemberCounsellingRequest);
 

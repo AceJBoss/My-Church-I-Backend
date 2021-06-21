@@ -12,6 +12,7 @@ const UserType = require('../database/models/').UserType;
 const ChurchUnit = require('../database/models/').ChurchUnit;
 const Event = require('../database/models/').Event;
 const Sermon = require('../database/models/').Sermon;
+const Preaching = require('../database/models/').Preaching;
 const ScheduleCounselling = require('../database/models/').ScheduleCounselling;
 const CounselFeedback = require('../database/models/').CounselFeedback;
 const formvalidator = require('../middlewares/formvalidator');
@@ -703,6 +704,92 @@ class AdminController{
 			});
 		}
 	}
+
+	/**
+	 * Create Preaching
+	 */
+	static async createPreaching(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
+				// collect data
+				let {title, preacher} = req.body;
+
+				// validate entry
+				let rules = {
+					title:'required',
+					preacher:'required',
+					video_url:'required',
+					video_key:'required'
+				}
+
+				let validator = formvalidator(req, rules);
+
+				if(validator){
+					await cloudinary.uploader.destroy(req.file.public_id);
+					return res.status(203).json({
+						error:true,
+						message:validator
+					});
+				}
+
+				let video_url = req.file.secure_url;
+				let video_key = req.file.public_id;
+
+				// validate Preaching
+				let validatePreaching = await callbacks.multiple(Event, {title:title});
+
+				if(validatePreaching.length > 0){
+					return res.status(203).json({
+						error:true,
+						message:'A Preaching with this title already exist.'
+					});
+				}
+
+				// upload preaching
+				let preachingObj = {
+					title:title,
+					video_url:video_url,
+					video_key: video_key,
+					preacher:preacher
+				}
+
+				Preaching.create(preachingObj)
+					.then(async saved=>{
+						if(saved){
+							return res.status(201).json({
+								error:false,
+								message:'Preaching uploaded successfully.'
+							});
+
+						}else{
+							return res.status(203).json({
+								error:true,
+								message:'Failed to upload preaching.'
+							});
+						}
+					})
+					.catch(err=>{
+						return res.status(203).json({
+							error:true,
+							message:err.message
+						});
+					});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(200).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
 
 	/**
 	 * fetch Member Counsellings Request
