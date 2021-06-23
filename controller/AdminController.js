@@ -719,9 +719,7 @@ class AdminController{
 				// validate entry
 				let rules = {
 					title:'required',
-					preacher:'required',
-					video_url:'required',
-					video_key:'required'
+					preacher:'required'
 				}
 
 				let validator = formvalidator(req, rules);
@@ -738,7 +736,7 @@ class AdminController{
 				let video_key = req.file.public_id;
 
 				// validate Preaching
-				let validatePreaching = await callbacks.multiple(Event, {title:title});
+				let validatePreaching = await callbacks.multiple(Preaching, {title:title});
 
 				if(validatePreaching.length > 0){
 					return res.status(203).json({
