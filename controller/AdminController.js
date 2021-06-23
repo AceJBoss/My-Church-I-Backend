@@ -654,7 +654,7 @@ class AdminController{
 				}
 
 				// validate sermon
-				let validateSermon = await callbacks.multiple(Event, {title:title});
+				let validateSermon = await callbacks.multiple(Sermon, {title:title});
 
 				if(validateSermon.length > 0){
 					return res.status(203).json({
@@ -675,7 +675,8 @@ class AdminController{
 						if(saved){
 							return res.status(201).json({
 								error:false,
-								message:'Sermon saved successfully.'
+								message:'Sermon saved successfully.',
+								data:saved
 							});
 
 						}else{
@@ -758,7 +759,8 @@ class AdminController{
 						if(saved){
 							return res.status(201).json({
 								error:false,
-								message:'Preaching uploaded successfully.'
+								message:'Preaching uploaded successfully.',
+								data:saved
 							});
 
 						}else{
