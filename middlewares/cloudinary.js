@@ -13,13 +13,24 @@ cloudinary.config({
 const storage = cloudinaryStorage({
 cloudinary: cloudinary,
 folder: "users",
-allowedFormats: ["jpg", "png", "jpeg", "mp4"],
+resource_type: "auto",
 transformation: [{ width: 500, height: 500, crop: "limit" }]
 });
 
+const videoStorage = cloudinaryStorage({
+	cloudinary: cloudinary,
+	params: {
+		folder: 'sermons',
+		format: 'mp4',
+		resource_type: 'video'
+	}
+});
+
 const parser = multer({ storage: storage, limit:{ fileSize: 1024 * 1024  * 5} });
+const videoParser = multer({ storage: videoStorage, limit:{ fileSize: 1024 * 1024  * 95} });
 
 module.exports = {
 	cloudinary,
-	parser
+	parser,
+	videoParser
 }

@@ -8,7 +8,7 @@ const express = require("express");
 const router = express.Router();
 const AdminController = require('../../controller/AdminController');
 const authGuard = require('../../middlewares/authguard');
-const {parser} = require('../../middlewares/cloudinary');
+const {parser,videoParser} = require('../../middlewares/cloudinary');
 
 router.post('/admin/create/church/unit', authGuard, AdminController.createChurchUnit);
 
@@ -37,7 +37,7 @@ router.post('/admin/create/event', authGuard, parser.single('file'), AdminContro
 
 router.post('/admin/create/sermon', authGuard, AdminController.createSermon);
 
-router.post('/admin/create/preaching', authGuard, parser.single('file'), AdminController.createPreaching);
+router.post('/admin/create/preaching', authGuard, videoParser.single('file'), AdminController.createPreaching);
 
 // fetch members counselling requests
 router.get('/admin/view/counselling/request', authGuard, AdminController.fetchMemberCounsellingRequest);

@@ -736,6 +736,8 @@ class AdminController{
 				let video_url = req.file.secure_url;
 				let video_key = req.file.public_id;
 
+				//console.log(req.file);
+
 				// validate Preaching
 				let validatePreaching = await callbacks.multiple(Preaching, {title:title});
 
