@@ -300,7 +300,7 @@ class BasicController {
               preachingArr.push(preachingObj);
             }
 
-            return res.status(200).json({ error: false, data: preachingObj, message: '' });
+            return res.status(200).json({ error: false, data: preachingArr, message: '' });
           })
           .catch(err => {
             return res.status(203).json({
