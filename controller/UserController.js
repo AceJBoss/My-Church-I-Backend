@@ -75,6 +75,7 @@ class UserController{
 			if(auth == 'member' || auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
 				// collect data
 				let user_id = req.decoded.user.id;
+				let dob = req.decoded.user.dob;
 
 				let {title, first_name, last_name, phone, email, gender, marital_status, lga_id, address } = req.body;
 				// validate entry
@@ -161,6 +162,7 @@ class UserController{
 							gender: gender,
 							marital_status: marital_status,
 							lga_id: lga_id,
+							dob:dob,
 							address: address,
 							is_auth: auth
     					};
