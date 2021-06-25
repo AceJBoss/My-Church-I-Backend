@@ -17,6 +17,9 @@ router.get('/user/profile', authGuard, UserController.getUserProfile);
 // user updates profile
 router.put('/user/update/profile', authGuard, UserController.updateBasicProfile);
 
+// user update token
+router.put('/user/update/device/token', authGuard, UserController.updateDeviceToken);
+
 // user change password
 router.put('/user/change/password', authGuard, UserController.changePassword);
 

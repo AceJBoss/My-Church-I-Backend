@@ -148,8 +148,7 @@ class UserController{
 							gender: gender,
 							marital_status: marital_status,
 							lga_id: lga_id,
-							address: address,
-	  						is_auth: auth
+							address: address
     					}
 
     					let userData = {
@@ -196,6 +195,69 @@ class UserController{
 			}
 		}catch(e){
 			return res.status(500).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
+	/**
+	 * update user device token
+	 */
+	static async updateDeviceToken(req, res){
+		try{
+			// validate user
+			let auth = req.decoded.user.is_auth;
+
+			if(auth == 'admin' || auth == 'pastor' || auth == 'deaconate' || auth == 'member'){
+				// collect data
+				let { device_token } = req.body;
+
+				// validate entry
+				let rules = {
+					'device_token':'required'
+				};
+
+				let validator = formvalidator(req, rules);
+
+				if(validator){
+					return res.status(203).json({
+						error:true,
+						message:validator
+					});
+				}
+				User.update({
+						device_token:device_token
+					},{
+						where:{
+							id:req.decoded.user.id
+						}
+					}).then(updated=>{
+						if(updated){
+							return res.status(200).json({
+								error:false,
+								message:"Token updated successfully."
+							});
+						}else{
+							return res.status(203).json({
+								error:true,
+								message:"Failed to update device token."
+							});
+						}
+					}).catch(err=>{
+						return res.status(203).json({
+							error:true,
+							message:err.message
+						});
+					});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(203).json({
 				error:true,
 				message:e.message
 			});
