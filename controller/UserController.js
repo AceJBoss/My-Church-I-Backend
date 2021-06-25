@@ -163,12 +163,12 @@ class UserController{
 							lga_id: lga_id,
 							address: address
     					};
-
-						var token = jwt.sign({
-							user: userDetails
-						}, secret, {});
-
-						userData.token = token;
+						//
+						// var token = jwt.sign({
+						// 	user: userDetails
+						// }, secret, {});
+						//
+						// userData.token = token;
     					return res.status(200).json({
     						error:false,
     						data:userData,
