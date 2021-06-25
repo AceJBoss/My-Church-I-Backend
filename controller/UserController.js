@@ -161,7 +161,8 @@ class UserController{
 							gender: gender,
 							marital_status: marital_status,
 							lga_id: lga_id,
-							address: address
+							address: address,
+							is_auth: auth
     					};
 						//
 						// var token = jwt.sign({
