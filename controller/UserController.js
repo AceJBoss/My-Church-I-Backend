@@ -76,6 +76,7 @@ class UserController{
 				// collect data
 				let user_id = req.decoded.user.id;
 				let dob = req.decoded.user.dob;
+				let image_url = req.decoded.user.image_url;
 
 				let {title, first_name, last_name, phone, email, gender, marital_status, lga_id, address } = req.body;
 				// validate entry
@@ -163,6 +164,7 @@ class UserController{
 							marital_status: marital_status,
 							lga_id: lga_id,
 							dob:dob,
+							image_url:image_url,
 							address: address,
 							is_auth: auth
     					};
