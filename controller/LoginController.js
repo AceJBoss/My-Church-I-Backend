@@ -103,9 +103,7 @@ class LoginController{
 
 						var token = jwt.sign({
 				          user: userDetails
-				        }, secret, {
-				          expiresIn: '1d'
-				        });
+				        }, secret, {});
 						userData.token = token;
 				        return res.status(200).json({
 				        	error:false,
