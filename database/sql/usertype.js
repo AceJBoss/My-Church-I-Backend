@@ -23,6 +23,16 @@ let userTypes = [
     user_type: "pastor",
     createdAt: new Date(),
     updatedAt: new Date()
+  },
+  {
+    user_type: "elders",
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    user_type: "council",
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ];
 
