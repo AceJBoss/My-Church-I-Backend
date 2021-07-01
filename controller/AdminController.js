@@ -817,7 +817,7 @@ class AdminController{
 						data.push(counsels[i].dataValues);
 					}
 					// return record
-					return res.status(200).json({data});
+					return res.status(200).json(data);
 				}).catch(err=>{
 					return res.status(203).json({
 						error:true,
