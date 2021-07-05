@@ -917,7 +917,7 @@ class AdminController{
 			// validate access
 			let auth =  req.decoded.user.is_auth;
 			if(auth == 'admin' || auth == "pastor"){
-				let countAllUsers = callbacks.overall(User);
+				let countAllUsers = await callbacks.overall(User);
 				if(countAllUsers){
 					return res.status(200).json({
 						error:false,
