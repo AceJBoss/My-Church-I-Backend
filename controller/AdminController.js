@@ -918,10 +918,14 @@ class AdminController{
 			let auth =  req.decoded.user.is_auth;
 			if(auth == 'admin' || auth == "pastor"){
 				let countAllUsers = await callbacks.overall(User);
+				let countAllMembers = await callbacks.statistics(User, {user_type_id: 8});
+				let tempData = {};
+				tempData.members = countAllMembers;
+				tempData.users = countAllUsers;
 				if(countAllUsers){
 					return res.status(200).json({
 						error:false,
-						data: countAllUsers
+						data: tempData
 					})
 				}
 			}
