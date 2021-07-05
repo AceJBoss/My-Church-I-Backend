@@ -45,5 +45,8 @@ router.get('/admin/view/counselling/request', authGuard, AdminController.fetchMe
 // Give feedback on counsel requests
 router.post('/admin/feedback-to/counsel/request', authGuard, AdminController.counselMembers);
 
+// Count all Users
+router.get('/admin/statistics', authGuard, AdminController.countAllUsers)
+
 
 module.exports = router;

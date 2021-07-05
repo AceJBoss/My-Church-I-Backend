@@ -909,6 +909,30 @@ class AdminController{
 		}
 	}
 
+	/**
+	 * Statistics
+	 */
+	static async countAllUsers(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'admin' || auth == "pastor"){
+				let countAllUsers = callbacks.overall(User);
+				if(countAllUsers){
+					return res.status(200).json({
+						error:false,
+						data: countAllUsers
+					})
+				}
+			}
+		}catch (e) {
+			return res.status(500).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
 }
 
 module.exports = AdminController;

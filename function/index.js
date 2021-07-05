@@ -8,6 +8,15 @@ module.exports ={
 		})
 	},
 
+	async statistics(modelName, obj){
+		return await modelName.count({
+			where:obj
+		})
+	},
+	async overall(modelName){
+		return await modelName.count({})
+	},
+
 	async findOne(modelName, obj){
 
 		return await modelName.findOne({
