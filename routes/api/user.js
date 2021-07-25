@@ -35,6 +35,12 @@ router.get('/user/view/counsellings', authGuard, UserController.fetchCounselling
 // user view Ministers
 router.get('/user/view/ministers', authGuard, UserController.fetchAllMinisters);
 
+// user view council
+router.get('/user/view/council', authGuard, UserController.fetchAllCouncils);
+
+// user view Members
+router.get('/user/view/members', authGuard, UserController.fetchAllMembers);
+
 // user view monthly vips
 router.get('/user/view/vips', authGuard, UserController.fetchAllVIPDates);
 

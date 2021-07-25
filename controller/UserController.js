@@ -725,6 +725,104 @@ class UserController{
 		}
 	}
 
+	/**
+	 * view all council
+	 */
+	static async fetchAllCouncils(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member'){
+				// get user type id
+				let getUserType2 = await callbacks.findOne(UserType, {user_type:'council'});
+				if(getUserType2.length < 1){
+					return res.status(203).json({
+						error:true,
+						message:'Failed to fetch records'
+					});
+				}
+				User.findAll({
+					where: {
+						user_type_id: getUserType2.id
+					}
+				}).then(users=>{
+					// collect data
+					let data = [];
+					for (var i = 0; i < users.length; i++) {
+						data.push(users[i].dataValues);
+					}
+					// return record
+					return res.status(200).json({data});
+				}).catch(err=>{
+					return res.status(203).json({
+						error:true,
+						message:err.message
+					});
+				});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(203).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
+	/**
+	 * view all members
+	 */
+	static async fetchAllMembers(req, res){
+		try{
+			// validate access
+			let auth =  req.decoded.user.is_auth;
+			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin' || auth == 'member'){
+				// get user type id
+				let getUserType = await callbacks.findOne(UserType, {user_type:'member'});
+
+				if(getUserType.length < 1){
+					return res.status(203).json({
+						error:true,
+						message:'Failed to fetch records'
+					});
+				}
+
+				User.findAll({
+					where:{
+						user_type_id:getUserType.id
+					}
+				}).then(users=>{
+					// collect data
+					let data = [];
+					for (var i = 0; i < users.length; i++) {
+						data.push(users[i].dataValues);
+					}
+					// return record
+					return res.status(200).json(data);
+				}).catch(err=>{
+					return res.status(203).json({
+						error:true,
+						message:err.message
+					});
+				});
+			}else{
+				return res.status(203).json({
+					error:true,
+					message:'un-authorized access.'
+				});
+			}
+		}catch(e){
+			return res.status(203).json({
+				error:true,
+				message:e.message
+			});
+		}
+	}
+
 
 	/**
 	 * view all Important VIPs

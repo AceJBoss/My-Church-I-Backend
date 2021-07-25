@@ -380,7 +380,6 @@ class AdminController{
 			if(auth == 'pastor' || auth == 'deaconate' || auth == 'admin'){
 				// get user type id
 				let getUserType = await callbacks.findOne(UserType, {user_type:'member'});
-
 				if(getUserType.length < 1){
 					return res.status(203).json({
 						error:true,
